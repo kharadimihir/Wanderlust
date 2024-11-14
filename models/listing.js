@@ -1,6 +1,6 @@
 import pkg from 'joi';
 import mongoose, { Schema, mongo } from "mongoose";
-import Review from './review.js';
+import Review from "./review.js"
 
 // const Schema = mongoose.Schema;
 

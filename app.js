@@ -98,7 +98,6 @@ app.get("/listing/:id/edit", asyncWrap(async (req, res) => {
 app.put("/listing/:id", validateListing, asyncWrap(async (req, res) => {
   let { id } = req.params;
   const listing = await Listing.findByIdAndUpdate(id, { ...req.body.listing });
-  console.log(listing);
   res.redirect(`/listing/${id}`);
 }));
 
