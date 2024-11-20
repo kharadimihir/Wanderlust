@@ -4,10 +4,13 @@ import { fileURLToPath } from "url";
 import path from "path";
 import methodOverride from "method-override";
 import ejsMate from "ejs-mate";
-import asyncWrap from "./utils/wrapAsync.js";
 import expressError from "./utils/expressError.js";
-import listingRouter from "./routes/listing.js"
-import reviewRouter from "./routes/review.js"
+import listingRouter from "./routes/listing.js";
+import reviewRouter from "./routes/review.js";
+import session from "express-session";
+import { Cookie } from "express-session";
+import flash from "connect-flash";
+import { nextTick } from "process";
 
 // Directory setup
 const __filename = fileURLToPath(import.meta.url);
@@ -30,6 +33,7 @@ app.use(express.static(path.join(__dirname, "public")));
 app.use(express.urlencoded({ extended: true })); // Parsing URL-encoded data
 app.use(methodOverride("_method"));
 
+
 // Database connection
 async function main() {
   await mongoose.connect(url);
@@ -38,8 +42,32 @@ main()
   .then(() => console.log("Connection Successful"))
   .catch((err) => console.log(err));
 
-  app.use("/", listingRouter)
-  app.use("/listing", reviewRouter)
+  
+
+const sessionOption = {
+  secret: "SECRET",
+  resave: false,
+  saveUninitialized: true,
+  cookie: {
+    maxAge: 7 * 24 * 60 * 60 * 1000, // 7 days in milliseconds
+    expires: new Date(Date.now() + 7 * 24 * 60 * 60 * 1000), // Proper Date object
+    httpOnly: true, // Ensures the cookie is accessible only by the web server
+  },
+};
+
+app.use(session(sessionOption));
+app.use(flash());
+
+app.use((req, res, next)=>{
+  res.locals.success = req.flash("success");
+  res.locals.error = req.flash("error");
+  next();
+})
+
+app.use("/", listingRouter)
+app.use("/listing", reviewRouter)
+
+
 
 // Catch-all for unknown routes
 app.all("*", (req, res, next) => {
