@@ -10,7 +10,11 @@ import reviewRouter from "./routes/review.js";
 import session from "express-session";
 import { Cookie } from "express-session";
 import flash from "connect-flash";
-import { nextTick } from "process";
+import passport from "passport";
+import LocalStrategy from "passport-local";
+import User from "./models/user.js";
+import userRouter from "./routes/user.js"
+
 
 // Directory setup
 const __filename = fileURLToPath(import.meta.url);
@@ -58,14 +62,34 @@ const sessionOption = {
 app.use(session(sessionOption));
 app.use(flash());
 
+// Password and authentication
+app.use(passport.initialize());
+app.use(passport.session());
+passport.use(new LocalStrategy(User.authenticate()));
+
+passport.serializeUser(User.serializeUser());
+passport.deserializeUser(User.deserializeUser());
+
 app.use((req, res, next)=>{
   res.locals.success = req.flash("success");
   res.locals.error = req.flash("error");
   next();
+});
+
+
+app.get("/demouser", async (req, res)=>{
+  let fakeUser = new User({
+    email: "student@gmail.com",
+    username: "rajkumar"
+  });
+
+  const registeredUser = await User.register(fakeUser, "Helloworld");
+  res.send(registeredUser)
 })
 
 app.use("/", listingRouter)
 app.use("/listing", reviewRouter)
+app.use("/", userRouter)
 
 
 
