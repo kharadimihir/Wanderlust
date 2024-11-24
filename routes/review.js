@@ -8,9 +8,9 @@ import { isOwner, reviewOwner, userLoggedIn }from "../middlewares.js";
 import { saveRedirectUrl } from "../middlewares.js";
 import { validateReview } from "../middlewares.js";
 
-const router = Router();
+const router = Router({mergeParams: true});
 
-router.post("/:id/reviews", userLoggedIn, validateReview, asyncWrap(async (req, res) => {
+router.post("/:id", userLoggedIn, saveRedirectUrl, validateReview, asyncWrap(async (req, res) => {
     let listing = await Listing.findById(req.params.id);
     if (!listing) {
       throw new expressError(404, "Listing not found");
@@ -26,7 +26,7 @@ router.post("/:id/reviews", userLoggedIn, validateReview, asyncWrap(async (req, 
   }));
   
   
-  router.delete("/:id/reviews/:reviewId", userLoggedIn, reviewOwner, asyncWrap(async(req, res)=>{
+  router.delete("/:id/reviews/:reviewId", userLoggedIn, saveRedirectUrl, reviewOwner, asyncWrap(async(req, res)=>{
     let { id, reviewId } = req.params;
     await Review.findByIdAndDelete(reviewId);
     await Listing.findByIdAndUpdate(id, {$pull: {reviews: reviewId}});

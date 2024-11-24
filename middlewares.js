@@ -1,11 +1,13 @@
+
 import Listing from "./models/listing.js";
 import Review from "./models/review.js";
 import { reviewSchema } from "./schema.js";
+import { listingSchema } from "./schema.js";
 
 
 const userLoggedIn = (req, res, next) => {
   if (!req.isAuthenticated()) {
-    req.session.redirectUrl = req.originalUrl;
+    req.session.redirectUrl = req.baseUrl + req.path;
     req.flash("error", "You must be logged in");
     return res.redirect("/login");
   }
