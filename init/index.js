@@ -1,5 +1,5 @@
 import mongoose from "mongoose";
-import  initData  from "./data.js"
+import initData from "./data.js"
 import Listing from "../models/listing.js";
 
 const MONGO_URL = "mongodb://127.0.0.1:27017/wanderlust";
@@ -15,9 +15,13 @@ main().then(() => {
 })
 
 const initDB = async () => {
-    await Listing.deleteMany({});
-    await Listing.insertMany(initData);
-    console.log("Data was initialized");
+    try {
+        await Listing.deleteMany({});
+        await Listing.insertMany(initData);
+        console.log("Data was initialized");
+    } catch (error) {
+        console.error("Error initializing data:", error);
+    }
 }
 
 initDB();
