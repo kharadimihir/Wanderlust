@@ -45,6 +45,7 @@ router.post(
   async (req, res) => {
     req.flash("success", "Welcome back to Waderlust");
     let redirectUrl = res.locals.redirectUrl || "/listing";
+    console.log(redirectUrl);
     delete req.session.redirectUrl;
     res.redirect(redirectUrl);
   }

@@ -7,7 +7,7 @@ import { listingSchema } from "./schema.js";
 
 const userLoggedIn = (req, res, next) => {
   if (!req.isAuthenticated()) {
-    req.session.redirectUrl = req.baseUrl + req.path;
+    req.session.redirectUrl = req.originalUrl.split("/reviews/")[0];
     req.flash("error", "You must be logged in");
     return res.redirect("/login");
   }
@@ -17,6 +17,7 @@ const userLoggedIn = (req, res, next) => {
 const saveRedirectUrl = (req, res, next) => {
   if (req.session.redirectUrl) {
     res.locals.redirectUrl = req.session.redirectUrl; 
+    delete req.session.redirectUrl;
   }
   next();
 };
