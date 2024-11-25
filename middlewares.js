@@ -1,4 +1,4 @@
-
+import expressError from "./utils/expressError.js";
 import Listing from "./models/listing.js";
 import Review from "./models/review.js";
 import { reviewSchema } from "./schema.js";
