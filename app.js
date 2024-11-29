@@ -16,9 +16,6 @@ import LocalStrategy from "passport-local";
 import User from "./models/user.js";
 import userRouter from "./routes/user.js"
 
-//if (process.env.NODE_ENV != "production") {
- 
-//}
 
 
 

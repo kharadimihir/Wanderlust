@@ -63,34 +63,6 @@ const createListing = async (req, res, next) => {
     }
 };
 
-// const createListing = async (req, res, next) => {
-//     try {
-//         const url = req.file?.path;
-//         const filename = req.file?.filename;
-
-//         if (!url) {
-//             req.flash("error", "Image upload failed or missing.");
-//             return res.redirect("/listing");
-//         }
-
-//         const result = await uploadToCloudinary(req.file.path);
-//         console.log(result);
-
-//         const newListing = new Listing(req.body.listing);
-//         newListing.owner = req.user._id;
-//         newListing.image = { url: image.url, filename };
-
-//         await newListing.save();
-
-//         req.flash("success", "New Listing Created!");
-//         res.redirect("/listing");
-//     } catch (err) {
-//         next(err);
-//     }
-// };
-
-
-
 const renderEditForm = async (req, res) => {
     let { id } = req.params;
     const listing = await Listing.findById(id);
