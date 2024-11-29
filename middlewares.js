@@ -3,6 +3,10 @@ import Listing from "./models/listing.js";
 import Review from "./models/review.js";
 import { reviewSchema } from "./schema.js";
 import { listingSchema } from "./schema.js";
+import multer from "multer";
+import { v4 as uuidv4 } from "uuid";
+import path from "path";
+import fs from "fs";
 
 
 const userLoggedIn = (req, res, next) => {
@@ -63,5 +67,39 @@ const validateReview = (req, res, next) => {
   }
 };
 
+const tempFolder = "./public/temp";
+if (!fs.existsSync(tempFolder)) {
+    fs.mkdirSync(tempFolder, { recursive: true });
+}
 
-export { userLoggedIn, saveRedirectUrl, isOwner, validateListing, validateReview, reviewOwner };
+// Define storage configuration
+const storage = multer.diskStorage({
+    destination: function (req, file, cb) {
+        cb(null, tempFolder); // Upload to the "temp" folder
+    },
+    filename: function (req, file, cb) {
+        const uniqueSuffix = uuidv4();
+        const extension = path.extname(file.originalname); // Get the original file extension
+        cb(null, `${file.fieldname}-${uniqueSuffix}${extension}`); // Create unique filename
+    },
+});
+
+// File filter to allow only images
+const fileFilter = (req, file, cb) => {
+  const allowedTypes = ["image/jpeg", "image/png", "image/jpg", "image/gif"];
+  if (allowedTypes.includes(file.mimetype)) {
+      cb(null, true); // Accept the file
+  } else {
+      cb(new Error("Invalid file type. Only images are allowed."), false); // Reject the file
+  }
+};
+
+const upload = multer({
+  storage,
+  limits: { fileSize: 50 * 1024 * 1024 }, // Limit file size to 50MB
+  fileFilter, // Apply the file filter
+});
+
+
+
+export { userLoggedIn, saveRedirectUrl, isOwner, validateListing, validateReview, reviewOwner, upload };

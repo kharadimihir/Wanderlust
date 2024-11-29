@@ -2,6 +2,10 @@ import { Router } from "express";
 import asyncWrap from "../utils/wrapAsync.js";
 import { isOwner, userLoggedIn, validateListing } from "../middlewares.js";
 import listingController from "../controllers/listing.controller.js";
+import multer from "multer";
+import { cloudinary } from "../cloudConfig.js";
+import { upload } from "../middlewares.js";
+
 
 const router = Router();
 
@@ -30,9 +34,26 @@ router
 router.post(
   "/listings",
   userLoggedIn,
+  upload.single(
+    'listing[image]'
+  ),
+(err, req, res, next) => {
+  if (err) {
+    console.error("Multer Upload Error:", err.message);
+    req.flash("error", "Image upload failed.");
+    return res.redirect("/listing/new");
+  }
+  next();
+},
   validateListing,
   asyncWrap(listingController.createListing)
 );
+
+// router.post("/listings", upload.single("listing[image]"), (req, res) => {
+//   console.log(req.file);
+//   res.send(req.file);
+// })
+
 
 router.get(
   "/listing/:id/edit",

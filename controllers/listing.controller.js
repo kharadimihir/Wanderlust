@@ -1,5 +1,7 @@
 import Listing from "../models/listing.js";
-import expressError from "../utils/expressError.js";
+import { uploadOnCloudinary } from "../cloudConfig.js";
+
+
 
 const index = async (req, res) => {
     const allListings = await Listing.find();
@@ -24,14 +26,69 @@ const showListing = async (req, res) => {
     res.render("listings/show.ejs", { listing });
 };
 
-
 const createListing = async (req, res, next) => {
-    const newListing = new Listing(req.body.listing);
-    newListing.owner = req.user._id;
-    await newListing.save();
-    req.flash("success", "New Listing Created!");
-    res.redirect("/listing");
+    try {
+        // Check if a file was uploaded
+        if (!req.file) {
+            req.flash("error", "Please upload an image.");
+            return res.redirect("/listing/new");
+        }
+        // Upload the file to Cloudinary
+        const cloudinaryResponse = await uploadOnCloudinary(req.file.path);
+        //console.log(cloudinaryResponse);
+
+        if (!cloudinaryResponse) {
+            req.flash("error", "Image upload failed. Please try again.");
+            return res.redirect("/listing/new");
+        }
+
+        // Create the new listing with the uploaded image details
+        const newListing = new Listing(req.body.listing);
+        newListing.owner = req.user._id; // Assuming `req.user` is populated
+        newListing.image = {
+            url: cloudinaryResponse.url, // Cloudinary image URL
+            filename: cloudinaryResponse.public_id, // Cloudinary public ID for the image
+        };
+
+        // Save the listing to the database
+        await newListing.save();
+
+        // Flash success message and redirect
+        req.flash("success", "New Listing Created!");
+        res.redirect("/listing");
+    } catch (error) {
+        console.error(error); // Log the error for debugging
+        req.flash("error", "Something went wrong. Please try again.");
+        res.redirect("/listing/new");
+    }
 };
+
+// const createListing = async (req, res, next) => {
+//     try {
+//         const url = req.file?.path;
+//         const filename = req.file?.filename;
+
+//         if (!url) {
+//             req.flash("error", "Image upload failed or missing.");
+//             return res.redirect("/listing");
+//         }
+
+//         const result = await uploadToCloudinary(req.file.path);
+//         console.log(result);
+
+//         const newListing = new Listing(req.body.listing);
+//         newListing.owner = req.user._id;
+//         newListing.image = { url: image.url, filename };
+
+//         await newListing.save();
+
+//         req.flash("success", "New Listing Created!");
+//         res.redirect("/listing");
+//     } catch (err) {
+//         next(err);
+//     }
+// };
+
 
 
 const renderEditForm = async (req, res) => {
