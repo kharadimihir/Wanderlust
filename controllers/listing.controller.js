@@ -1,5 +1,6 @@
 import Listing from "../models/listing.js";
 import { uploadOnCloudinary } from "../cloudConfig.js";
+import { geocodeAddress } from "../geocode.js";
 
 
 
@@ -35,7 +36,6 @@ const createListing = async (req, res, next) => {
         }
         // Upload the file to Cloudinary
         const cloudinaryResponse = await uploadOnCloudinary(req.file.path);
-        //console.log(cloudinaryResponse);
 
         if (!cloudinaryResponse) {
             req.flash("error", "Image upload failed. Please try again.");
@@ -44,14 +44,20 @@ const createListing = async (req, res, next) => {
 
         // Create the new listing with the uploaded image details
         const newListing = new Listing(req.body.listing);
+        const address = newListing.location;
+        const response = await geocodeAddress(address);
         newListing.owner = req.user._id; // Assuming `req.user` is populated
         newListing.image = {
             url: cloudinaryResponse.url, // Cloudinary image URL
             filename: cloudinaryResponse.public_id, // Cloudinary public ID for the image
         };
+        newListing.geometry = {
+            type: "Point",                  // Always set to "Point" for GeoJSON
+            coordinates: [response.lng, response.lat] 
+        };
 
         // Save the listing to the database
-        await newListing.save();
+       let savedListing =  await newListing.save();
 
         // Flash success message and redirect
         req.flash("success", "New Listing Created!");
@@ -70,13 +76,27 @@ const renderEditForm = async (req, res) => {
       req.flash("error", "Listing that you are trying to access is not exsist");
       res.redirect("/listing");
     }
-    res.render("listings/edit.ejs", { listing });
+
+    let originalImageUrl = listing.image.url;
+    originalImageUrl = originalImageUrl.replace("/upload", "/upload/h_150,w_200")
+    res.render("listings/edit.ejs", { listing, originalImageUrl });
 };
 
 
 const updateListing = async (req, res) => {
     let { id } = req.params;
-    await Listing.findByIdAndUpdate(id, { ...req.body.listing });
+
+    let listing = await Listing.findByIdAndUpdate(id, { ...req.body.listing });
+
+    if (typeof req.file !== "undefined") {
+        const cloudinaryResponse = await uploadOnCloudinary(req.file.path);
+        listing.image = {
+            url: cloudinaryResponse.url, // Cloudinary image URL
+            filename: cloudinaryResponse.public_id, // Cloudinary public ID for the image
+        };
+    }
+
+    await listing.save();
     req.flash("success", "Update listing");
     res.redirect(`/listing/${id}`);
 };

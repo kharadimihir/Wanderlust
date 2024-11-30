@@ -27,6 +27,9 @@ router
 .get(asyncWrap(listingController.showListing))
 .put(userLoggedIn,
   isOwner,
+  upload.single(
+    'listing[image]'
+  ),
   validateListing,
   asyncWrap(listingController.updateListing)
 )
@@ -45,7 +48,7 @@ router.post(
   }
   next();
 },
-  validateListing,
+  //validateListing,
   asyncWrap(listingController.createListing)
 );
 
