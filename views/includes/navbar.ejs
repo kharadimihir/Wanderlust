@@ -8,25 +8,70 @@
             <div class="navbar-nav">
                 <a class="nav-link" href="/listing">Explore</a>
             </div>
-            <div class="navbar-nav ms-auto">
+            <!-- <div class="navbar-nav ms-auto">
                 <form class="d-flex" role="search">
                     <input class="form-control me-2 search-input" type="search" placeholder="Search Destinations">
                     <button class="btn search-btn" type="submit"> <i class="fa-solid fa-magnifying-glass"></i>Search</button>
                   </form>
+            </div> -->
+            <div class="navbar-nav ms-auto">
+                <form action="/listing" id="searchForm" method="GET" class="d-flex align-items-center" role="search">
+                    <!-- Dropdown for Search Type -->
+                    <select name="searchType" class="form-select me-2 search-input" id="searchType" onchange="handleSearchTypeChange()">
+                        <option value="">Select Search Type</option>
+                        <option value="location">Location</option>
+                        <option value="country">Country</option>
+                        <option value="price">Price</option>
+                        <option value="category">Category</option>
+                    </select>
+                
+                    <!-- Input Field (Displayed for Location and Country) -->
+                    <input class="form-control me-2 search-input" type="text" placeholder="Enter Search Term" name="searchQuery" id="searchQuery" style="display: none;" />
+                
+                    <!-- Price Input Field (Displayed Only When Price is Selected) -->
+                    <input class="form-control me-2 search-input" type="text" placeholder="Enter Price" name="price" id="priceInput" style="display: none;" />
+                
+                    <!-- Category Dropdown (Displayed Only When Category is Selected) -->
+                    <select name="category" id="categoryDropdown" class="form-select me-2 search-input" style="display: none;">
+                        <option value="">Select Category</option>
+                        <option value="Rooms">Rooms</option>
+                        <option value="Trending">Trending</option>
+                        <option value="Iconic cities">Iconic Cities</option>
+                        <option value="Mountains">Mountains</option>
+                        <option value="Castle">Castle</option>
+                        <option value="Amazing pool">Amazing Pool</option>
+                        <option value="Camping">Camping</option>
+                    </select>
+                
+                    <!-- Submit Button with Icon -->
+                    <button class="btn search-btn d-flex align-items-center" type="submit">
+                        <i class="fa-solid fa-magnifying-glass"></i> <span class="ms-1">Search</span>
+                    </button>
+                </form>
             </div>
+            
+            
+
             <div class="navbar-nav ms-auto">
                 <a class="nav-link" href="/listing/new">Airbnb your home</a>
                 <% if(!currUser){ %>
-                <a class="nav-link" href="/signup"><b>Sign up</b></a>
-                <a class="nav-link" href="/login"><b>Log in</b></a>
-          <%  } %>
-            <% if(currUser){ %>
-                <a class="nav-link" href="/logout"><b>Log out</b></a>
-          <%  } %>    
+                    <a class="nav-link" href="/signup"><b>Sign up</b></a>
+                    <a class="nav-link" href="/login"><b>Log in</b></a>
+                    <% } %>
+                        <% if(currUser){ %>
+                            <a class="nav-link" href="/logout"><b>Log out</b></a>
+                            <% } %>
             </div>
         </div>
     </div>
 </nav>
+
+
+
+
+
+
+
 
 
 

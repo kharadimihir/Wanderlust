@@ -127,3 +127,21 @@ body{
    height: 400px; 
    width: 95vh;
 }
+
+
+.msg {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    height: 65vh; /* Centers the message vertically */
+    margin: 0 auto;
+}
+
+.msg-alert {
+    font-size: 1.3rem; /* Increase the font size */
+    padding: 2rem; /* Add padding to make the alert bigger */
+}
+
+
+
+/* new style */

@@ -1,7 +1,7 @@
 
 import mongoose, { Schema, mongo } from "mongoose";
 import Review from "./review.js";
-import User from './user.js';
+
 
 // const Schema = mongoose.Schema;
 
@@ -52,6 +52,11 @@ const listingSchema = new Schema({
       type: [Number],
       required: true
     }
+  },
+  category: {
+    type: String,
+    enum: ["Trending", "Rooms", "Iconic cities", "Mountains", "Castle", "Amazing pool", "Camping", "Farms", "Artic", "Golfing", "Lake"],
+    required: true
   }
 });
 

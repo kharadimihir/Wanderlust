@@ -30,7 +30,7 @@ router
   upload.single(
     'listing[image]'
   ),
-  validateListing,
+  //validateListing,
   asyncWrap(listingController.updateListing)
 )
 

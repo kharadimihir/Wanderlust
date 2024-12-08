@@ -24,8 +24,8 @@ const __filename = fileURLToPath(import.meta.url);
 const __dirname = path.dirname(__filename);
 
 // Database connection URL
-const url = "mongodb://127.0.0.1:27017/wanderlust";
-
+const mongodbUrl = "mongodb://127.0.0.1:27017/wanderlust";
+//const mongodbUrl = "mongodb+srv://wanderlust:OVP90tqPtbadoiVQ@cluster0.mp9cq.mongodb.net/?retryWrites=true&w=majority&appName=Cluster0";
 // Initialize Express app
 const app = express();
 const PORT = process.env.PORT || 5000;
@@ -42,12 +42,27 @@ app.use(methodOverride("_method"));
 
 
 // Database connection
+// async function main() {
+//   mongoose.set('debug', true);
+
+//   await mongoose.connect(mongodbUrl);
+// }
+// main()
+//   .then(() => console.log("Connection Successful"))
+//   .catch((err) => console.log(err));
+
 async function main() {
-  await mongoose.connect(url);
+  try {
+    mongoose.set('debug', true);
+    await mongoose.connect(mongodbUrl);
+    console.log("Connection Successful");
+  } catch (err) {
+    console.log("Connection Failed:", err);
+  }
 }
-main()
-  .then(() => console.log("Connection Successful"))
-  .catch((err) => console.log(err));
+
+main();
+
 
   
 
