@@ -27,8 +27,8 @@ const __filename = fileURLToPath(import.meta.url);
 const __dirname = path.dirname(__filename);
 
 // Database connection URL
-//const mongodbUrl = "mongodb://127.0.0.1:27017/wanderlust";
-const mongodbUrl = process.env.MONGO_URL;
+const mongodbUrl = "mongodb://127.0.0.1:27017/wanderlust";
+//const mongodbUrl = process.env.MONGO_URL;
 // Initialize Express app
 const app = express();
 const PORT = process.env.PORT;
