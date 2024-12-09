@@ -1,12 +1,12 @@
 body{ 
         font-family: "Plus Jakarta Sans", sans-serif !important;
         font-optical-sizing: auto !important;
-        font-weight: weight !important;
+        font-weight: 400 !important;
         font-style: normal !important;
         display: flex;
         flex-direction: column;
         min-height: 100vh;
-}
+    }
 
 .container {
     flex: 1;
@@ -16,15 +16,27 @@ body{
 .fa-compass {
     font-size: 2rem;
     color: #fe424d;
+    line-height: 5rem;
 }
 
 .navbar {
-    height: 5rem;
+    min-height: 5rem;
     background-color: white;
+    padding: 0.5rem 1rem;
+    transition: all 0.3s ease-in-out;
 }
 
 .nav-link {
     color: #222222 !important; 
+}
+
+.nav-link:hover {
+    color: #fe424d !important;
+    text-decoration: none;
+}
+
+.navbar-collapse {
+    transition: height 0.3s ease, opacity 0.3s ease;
 }
 
 

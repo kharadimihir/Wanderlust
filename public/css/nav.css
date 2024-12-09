@@ -50,6 +50,28 @@
     font-size: 0.9rem;
 }
 
+/* Remove the default dropdown icon */
+#searchType  {
+    -webkit-appearance: none; /* Chrome, Safari, and Edge */
+    -moz-appearance: none;    /* Firefox */
+    appearance: none;         /* Standard syntax */
+    background: none;         /* Remove default background if needed */
+    background-color: transparent; /* Optional: set your desired background color */
+    padding-right: 1.5rem;    /* Add space for custom icon (optional) */
+    border: 1px solid #ccc;   /* Optional: style the border */
+}
+
+#categoryDropdown  {
+    -webkit-appearance: none; /* Chrome, Safari, and Edge */
+    -moz-appearance: none;    /* Firefox */
+    appearance: none;         /* Standard syntax */
+    background: none;         /* Remove default background if needed */
+    background-color: transparent; /* Optional: set your desired background color */
+    padding-right: 1.5rem;    /* Add space for custom icon (optional) */
+    border: 1px solid #ccc;   /* Optional: style the border */
+}
+
+
 .search-input:hover {
     cursor: pointer;
 }
@@ -162,10 +184,46 @@
     }
 
     .form-check-label:after {
-        font-size: 1.1rem;
+        font-size: 0.5rem;
     }
 }
 
+
+/* Compact search bar for smaller screens */
+@media (max-width: 768px) {
+    #searchForm {
+        flex-direction: row; /* Keep items in a horizontal row */
+        flex-wrap: nowrap; /* Prevent wrapping to next line */
+        gap: 0.3rem; /* Reduce spacing between elements */
+        align-items: center; /* Vertically center items */
+        justify-content: center; /* Center the form content */
+    }
+
+    .search-input {
+        min-width: 7rem; /* Adjust minimum width to save space */
+        width: calc(33% - 0.3rem); /* Allocate equal space for inputs */
+        font-size: 0.95rem; /* Reduce font size */
+        padding: 0.3rem 1rem; /* Reduce padding for a compact design */
+    }
+
+    #searchType {
+        min-width: 7rem; /* Adjust minimum width for the dropdown */
+        width: calc(33% - 0.3rem); /* Same width as inputs */   
+    }
+
+    .search-btn {
+        font-size: 0.8rem; /* Slightly reduce button font size */
+        padding: 0.3rem 0.8rem; /* Adjust button padding for compactness */
+        width: auto; /* Make button dynamically sized */
+    }
+
+    /* Ensure placeholder text is fully visible */
+    .search-input::placeholder {
+        text-overflow: ellipsis; /* Add ellipsis if text overflows */
+        white-space: nowrap; /* Prevent placeholder text wrapping */
+        overflow: hidden; /* Hide excess text */
+    }
+}
 
 
 

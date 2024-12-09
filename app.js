@@ -9,6 +9,7 @@ import expressError from "./utils/expressError.js";
 import listingRouter from "./routes/listing.js";
 import reviewRouter from "./routes/review.js";
 import session from "express-session";
+import MongoStore from "connect-mongo";
 import { Cookie } from "express-session";
 import flash from "connect-flash";
 import passport from "passport";
@@ -24,8 +25,8 @@ const __filename = fileURLToPath(import.meta.url);
 const __dirname = path.dirname(__filename);
 
 // Database connection URL
-const mongodbUrl = "mongodb://127.0.0.1:27017/wanderlust";
-//const mongodbUrl = "mongodb+srv://wanderlust:OVP90tqPtbadoiVQ@cluster0.mp9cq.mongodb.net/?retryWrites=true&w=majority&appName=Cluster0";
+//const mongodbUrl = "mongodb://127.0.0.1:27017/wanderlust";
+const mongodbUrl = "mongodb+srv://wanderlust:OVP90tqPtbadoiVQ@cluster0.mp9cq.mongodb.net/?retryWrites=true&w=majority&appName=Cluster0";
 // Initialize Express app
 const app = express();
 const PORT = process.env.PORT || 5000;
@@ -65,8 +66,19 @@ main();
 
 
   
+const store = MongoStore.create({
+  mongoUrl: mongodbUrl,
+  crypto: {
+    secret: "SECRET",
+  },
+  touchAfter: 24 * 3600,
+});
 
+store.on("error", () => {
+  console.log("Error in mongo session store", error);
+})
 const sessionOption = {
+  store: store,
   secret: "SECRET",
   resave: false,
   saveUninitialized: true,

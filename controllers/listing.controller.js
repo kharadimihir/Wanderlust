@@ -3,6 +3,7 @@ import { uploadOnCloudinary } from "../cloudConfig.js";
 import { geocodeAddress } from "../geocode.js";
 
 
+
 const index = async (req, res) => {
   let { searchType, searchQuery, category, price } = req.query;
   let allListings;
@@ -73,7 +74,6 @@ const createListing = async (req, res, next) => {
 
     // Upload the file to Cloudinary
     const cloudinaryResponse = await uploadOnCloudinary(req.file.path);
-
     if (!cloudinaryResponse) {
       req.flash("error", "Image upload failed. Please try again.");
       return res.redirect("/listing/new");
