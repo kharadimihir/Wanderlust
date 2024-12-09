@@ -1,24 +1,17 @@
 {
-    "version": 2,
-    "builds": [
-      {
-        "src": "backend/package.json",
-        "use": "@vercel/node"
-      }
-    ],
-    "routes": [
-      {
-        "src": "/api/(.*)",
-        "dest": "/backend/api/$1"
-      },
-      {
-        "src": "/(.*)",
-        "dest": "/backend/views/$1"
-      },
-      {
-        "src": "/public/(.*)",
-        "dest": "/backend/public/$1"
-      }
-    ]
-  }
-  
+  "version": 2,
+  "routes": [
+    {
+      "src": "/api/(.*)",
+      "dest": "/backend/api/$1"
+    },
+    {
+      "src": "/(.*)",
+      "dest": "/backend/views/$1"
+    },
+    {
+      "src": "/public/(.*)",
+      "dest": "/backend/public/$1"
+    }
+  ]
+}
