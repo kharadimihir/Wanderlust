@@ -104,7 +104,7 @@ app.use("/listing", reviewRouter)
 app.use("/", userRouter)
 app.all("*", (req, res) => {
   req.flash("error", "Page not found, redirected to home!");
-  res.redirect("/"); // Redirect to your home page
+  res.redirect("/listing"); // Redirect to your home page
 });
 
 
