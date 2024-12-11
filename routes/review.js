@@ -12,9 +12,5 @@ router.post("/:id", userLoggedIn, saveRedirectUrl, validateReview, asyncWrap(rev
   
 router.delete("/:id/reviews/:reviewId", userLoggedIn, saveRedirectUrl, reviewOwner, asyncWrap(reviewController.deleteReview));
 
-app.all("*", (req, res) => {
-    req.flash("error", "Page not found, redirected to home!");
-    res.redirect("/listing"); // Redirect to your home page
-  });
 
 export default router
